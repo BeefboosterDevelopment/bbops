@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="02/10/2014 20:35:39" ReportInfo.Modified="04/06/2014 14:10:02" ReportInfo.CreatorVersion="2014.1.3.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="bbop" ConnectionString="rijcmlqudtbOw0t//uT0+v7imlr8ceuDCvKEKOVlwHS/JFi6RIRGtBSj9m27IUXTEvb2Sq9tgvRViDuXZ9/iUu5d8LAAoixi0t4VSs+2/ZziSS05XvireOGZmr0kuQCwvCDlG5IhE4eqJCaRoVF3GpoL9+44kXRo4ZSiygPJirtGyQgXYpbnBxTyLlqjSQud62Pj9zB6ecETRxu8ygxktwPdmbImA==">
+      <TableDataSource Name="rpt_vwHerdProfile" DataType="System.Int32" Enabled="true" TableName="rpt.&quot;vwHerdProfile&quot;">
+        <Column Name="ID" DataType="System.Int32"/>
+        <Column Name="Herd_SN" DataType="System.Int32"/>
+        <Column Name="GeneratedOn" DataType="System.DateTime"/>
+        <Column Name="CalvingYear" DataType="System.Int32"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="Cows" DataType="System.Int32"/>
+        <Column Name="Heifers" DataType="System.Int32"/>
+        <Column Name="Sires" DataType="System.Int32"/>
+        <Column Name="Born" DataType="System.Int32"/>
+        <Column Name="Weaned" DataType="System.Int32"/>
+        <Column Name="WWT" DataType="System.Int32"/>
+        <Column Name="WWPDA" DataType="System.Decimal"/>
+        <Column Name="TotalWWT" DataType="System.Int32"/>
+        <Column Name="AvgRawWeanWt" DataType="System.Int32"/>
+        <Column Name="AvgDamWt" DataType="System.Int32"/>
+        <Column Name="CalfAgeDays" DataType="System.Int32"/>
+        <Column Name="DamAgeYears" DataType="System.Int32"/>
+        <Column Name="NumberExposedCows" DataType="System.Int32"/>
+        <Column Name="NumberBredCows" DataType="System.Int32"/>
+        <Column Name="WeaningRatePct" DataType="System.Int32"/>
+        <Column Name="LbsWeanedPerExposed" DataType="System.Int32"/>
+        <Column Name="WWT_Pct_as_a_Pct_CowWt" DataType="System.Int32"/>
+        <Column Name="CowToBullRatio" DataType="System.Decimal"/>
+        <Column Name="HeiferToBullRatio" DataType="System.Decimal"/>
+        <Column Name="GrowthRatio" DataType="System.Int32"/>
+        <Column Name="OpenCowsPct" DataType="System.Int32"/>
+        <Column Name="LengthOfCalvingPeriod" DataType="System.Int32"/>
+        <Column Name="DeathLossPct" DataType="System.Int32"/>
+        <Column Name="Herd_Code" DataType="System.String"/>
+        <Column Name="Strain_Code" DataType="System.String"/>
+        <Column Name="GeneticHerd_Name" DataType="System.String"/>
+        <Column Name="GeneticHerd_SN" DataType="System.Int32"/>
+        <Column Name="GIG_SN" DataType="System.Int32"/>
+        <Column Name="AccountNo" DataType="System.String"/>
+        <Column Name="Person_Name" DataType="System.String"/>
+        <Column Name="HomePhone_Str" DataType="System.String"/>
+        <Column Name="FaxPhone_Str" DataType="System.String"/>
+        <Column Name="Street_Str" DataType="System.String"/>
+        <Column Name="Postal_Str" DataType="System.String"/>
+        <Column Name="City_Name" DataType="System.String"/>
+        <Column Name="Prov_Name" DataType="System.String"/>
+        <Column Name="Country_Name" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="rpt_HerdProfile_Weaning" DataType="System.Int32" Enabled="true" TableName="rpt.&quot;HerdProfile_Weaning&quot;">
+        <Column Name="MasterID" DataType="System.Int32"/>
+        <Column Name="ID" DataType="System.Int32"/>
+        <Column Name="Sex_Code" DataType="System.String"/>
+        <Column Name="Born" DataType="System.Int32"/>
+        <Column Name="Weaned" DataType="System.Int32"/>
+        <Column Name="CalfAgeDays" DataType="System.Int32"/>
+        <Column Name="DamAgeYears" DataType="System.Int32"/>
+        <Column Name="WWT" DataType="System.Int32"/>
+        <Column Name="ADGBW" DataType="System.Decimal"/>
+        <Column Name="WWPDA" DataType="System.Decimal"/>
+      </TableDataSource>
+      <TableDataSource Name="rpt_HerdProfile_Estrus" DataType="System.Int32" Enabled="true" TableName="rpt.&quot;HerdProfile_Estrus&quot;">
+        <Column Name="MasterID" DataType="System.Int32"/>
+        <Column Name="ID" DataType="System.Int32"/>
+        <Column Name="DamClass" DataType="System.String"/>
+        <Column Name="Order" DataType="System.Int32"/>
+        <Column Name="TotalBorn" DataType="System.Int32"/>
+        <Column Name="DateSpan1" DataType="System.String"/>
+        <Column Name="Count1" DataType="System.Int32"/>
+        <Column Name="DateSpan2" DataType="System.String"/>
+        <Column Name="Count2" DataType="System.Int32"/>
+        <Column Name="DateSpan3" DataType="System.String"/>
+        <Column Name="Count3" DataType="System.Int32"/>
+        <Column Name="DateSpanLater" DataType="System.String"/>
+        <Column Name="CountLater" DataType="System.Int32"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Relation Name="rpt_HerdProfile_rpt_vwHerds" ParentDataSource="null" ChildDataSource="null" ParentColumns="Herd_SN" ChildColumns="Herd_SN" Enabled="true"/>
+    <Relation Name="rpt_vwHerdProfile_rpt_HerdProfile_Weaning" ParentDataSource="rpt_vwHerdProfile" ChildDataSource="rpt_HerdProfile_Weaning" ParentColumns="ID" ChildColumns="MasterID" Enabled="true"/>
+    <Relation Name="rpt_vwHerdProfile_rpt_HerdProfile_Estrus" ParentDataSource="rpt_vwHerdProfile" ChildDataSource="rpt_HerdProfile_Estrus" ParentColumns="ID" ChildColumns="MasterID" Enabled="true"/>
+    <Parameter Name="profileId" DataType="System.Int32" Expression="62"/>
+  </Dictionary>
+  <ReportPage Name="Page1" Guides="-9.45">
+    <ReportTitleBand Name="ReportTitle1" Top="20" Width="718.2" Height="18.9">
+      <TextObject Name="Text1" Width="207.9" Height="18.9" Text="Herd Profile Report" Font="Arial, 14pt, style=Bold, Underline"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="58.9" Width="718.2" Guides="28.35,0,0,0,0,0"/>
+    <DataBand Name="Herd" Top="78.9" Width="718.2" Height="368.55" DataSource="rpt_vwHerdProfile" Filter="[rpt_vwHerdProfile.ID]== [profileId]">
+      <TextObject Name="Text6" Left="481.95" Top="9.45" Width="151.2" Height="18.9" Text="[rpt_vwHerdProfile.GeneratedOn]" Format="Date" Format.Format="F" HorzAlign="Right" VertAlign="Center" Font="Arial, 6pt"/>
+      <TextObject Name="Text3" Left="18.9" Top="9.45" Width="47.25" Height="28.35" Text="Herd" HorzAlign="Right" VertAlign="Center" Font="Arial, 12pt"/>
+      <TextObject Name="Text5" Left="66.15" Top="9.45" Width="47.25" Height="28.35" Text="[rpt_vwHerdProfile.Herd_Code]" VertAlign="Center" Font="Arial, 12pt"/>
+      <TextObject Name="Text2" Left="179.55" Top="9.45" Width="94.5" Height="28.35" Text="[rpt_vwHerdProfile.CalvingYear]" VertAlign="Center" Font="Arial, 12pt"/>
+      <TextObject Name="Text4" Left="132.3" Top="9.45" Width="47.25" Height="28.35" Text="Year" HorzAlign="Right" VertAlign="Center" Font="Arial, 12pt"/>
+      <TextObject Name="Text7" Left="642.6" Top="9.45" Width="37.8" Height="18.9" Text="[rpt_vwHerdProfile.ID]" HorzAlign="Right" VertAlign="Center" Font="Arial, 6pt"/>
+      <TextObject Name="Text19" Left="359.1" Top="349.65" Width="47.25" Height="18.9" Text="WWT" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text9" Left="-9.45" Top="349.65" Width="37.8" Height="18.9" Text="Sex" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text11" Left="66.15" Top="349.65" Width="37.8" Height="18.9" Text="Born" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text13" Left="113.4" Top="349.65" Width="66.15" Height="18.9" Text="Weaned" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text15" Left="207.9" Top="349.65" Width="37.8" Height="18.9" Text="Age" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text17" Left="274.05" Top="349.65" Width="66.15" Height="18.9" Text="Dam Age" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text22" Left="-9.45" Top="264.6" Width="652.05" Height="18.9" Text="Weaning" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text39" Left="425.25" Top="349.65" Width="47.25" Height="18.9" Text="ADG" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text41" Left="491.4" Top="349.65" Width="66.15" Height="18.9" Text="WWPDA" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text21" Left="56.7" Top="94.5" Width="56.7" Height="18.9" Text="[rpt_vwHerdProfile.Cows]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text26" Top="94.5" Width="56.7" Height="18.9" Text="Cows"/>
+      <TextObject Name="Text43" Left="56.7" Top="66.15" Width="56.7" Height="18.9" Text="[rpt_vwHerdProfile.Heifers]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text44" Top="66.15" Width="56.7" Height="18.9" Text="Heifers"/>
+      <TextObject Name="Text45" Left="56.7" Top="122.85" Width="56.7" Height="18.9" Text="[rpt_vwHerdProfile.Sires]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text46" Top="122.85" Width="56.7" Height="18.9" Text="Sires"/>
+      <TextObject Name="Text47" Left="217.35" Top="66.15" Width="56.7" Height="18.9" Text="[rpt_vwHerdProfile.Born]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text48" Left="151.2" Top="66.15" Width="66.15" Height="18.9" Text="Born"/>
+      <TextObject Name="Text49" Left="217.35" Top="94.5" Width="56.7" Height="18.9" Text="[rpt_vwHerdProfile.Weaned]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text50" Left="151.2" Top="94.5" Width="66.15" Height="18.9" Text="Weaned"/>
+      <TextObject Name="Text51" Left="75.6" Top="292.95" Width="66.15" Height="18.9" Text="[rpt_vwHerdProfile.WWT]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text52" Left="-9.45" Top="292.95" Width="85.05" Height="18.9" Text="WWT"/>
+      <TextObject Name="Text53" Left="255.15" Top="292.95" Width="75.6" Height="18.9" Text="[rpt_vwHerdProfile.WWPDA]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text54" Left="170.1" Top="292.95" Width="85.05" Height="18.9" Text="WWPDA"/>
+      <TextObject Name="Text55" Left="255.15" Top="321.3" Width="75.6" Height="18.9" Text="[rpt_vwHerdProfile.TotalWWT]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text56" Left="170.1" Top="321.3" Width="85.05" Height="18.9" Text="Total WWT"/>
+      <TextObject Name="Text57" Left="75.6" Top="321.3" Width="66.15" Height="18.9" Text="[rpt_vwHerdProfile.AvgRawWeanWt]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text58" Left="-9.45" Top="321.3" Width="85.05" Height="18.9" Text="WWT (raw)"/>
+      <TextObject Name="Text59" Left="368.55" Top="66.15" Width="56.7" Height="18.9" Text="[rpt_vwHerdProfile.AvgDamWt]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text60" Left="302.4" Top="66.15" Width="66.15" Height="18.9" Text="Dam Wt"/>
+      <TextObject Name="Text61" Left="368.55" Top="94.5" Width="56.7" Height="18.9" Text="[rpt_vwHerdProfile.CalfAgeDays]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text62" Left="302.4" Top="94.5" Width="66.15" Height="18.9" Text="Calf Age"/>
+      <TextObject Name="Text63" Left="368.55" Top="122.85" Width="56.7" Height="18.9" Text="[rpt_vwHerdProfile.DamAgeYears]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text64" Left="302.4" Top="122.85" Width="66.15" Height="18.9" Text="Dam Age"/>
+      <TextObject Name="Text65" Left="585.9" Top="66.15" Width="66.15" Height="18.9" Text="[rpt_vwHerdProfile.NumberExposedCows]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text66" Left="444.15" Top="66.15" Width="141.75" Height="18.9" Text="Exposed Cows"/>
+      <TextObject Name="Text67" Left="585.9" Top="94.5" Width="66.15" Height="18.9" Text="[rpt_vwHerdProfile.NumberBredCows]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text68" Left="444.15" Top="94.5" Width="141.75" Height="18.9" Text="Bred Cows"/>
+      <TextObject Name="Text69" Left="585.9" Top="122.85" Width="66.15" Height="18.9" Text="[rpt_vwHerdProfile.WeaningRatePct]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text70" Left="444.15" Top="122.85" Width="141.75" Height="18.9" Text="Weaning Rate %"/>
+      <TextObject Name="Text71" Left="585.9" Top="151.2" Width="66.15" Height="18.9" Text="[rpt_vwHerdProfile.LbsWeanedPerExposed]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text72" Left="444.15" Top="151.2" Width="141.75" Height="18.9" Text="lbs Weaned/Exposed"/>
+      <TextObject Name="Text73" Left="557.55" Top="311.85" Width="56.7" Height="18.9" Text="[rpt_vwHerdProfile.WWT_Pct_as_a_Pct_CowWt]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text74" Left="406.35" Top="311.85" Width="151.2" Height="18.9" Text="WWT % as % Cow Wt"/>
+      <TextObject Name="Text75" Left="585.9" Top="179.55" Width="66.15" Height="18.9" Text="[rpt_vwHerdProfile.CowToBullRatio]" Format="Number" Format.UseLocale="true" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt, style=Bold" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text76" Left="444.15" Top="179.55" Width="141.75" Height="18.9" Text="Cow To Bull Ratio"/>
+      <TextObject Name="Text77" Left="585.9" Top="207.9" Width="66.15" Height="18.9" Text="[rpt_vwHerdProfile.HeiferToBullRatio]" Format="Number" Format.UseLocale="true" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt, style=Bold" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text78" Left="444.15" Top="207.9" Width="141.75" Height="18.9" Text="HeiferToBullRatio"/>
+      <TextObject Name="Text79" Left="368.55" Top="151.2" Width="56.7" Height="18.9" Text="[rpt_vwHerdProfile.GrowthRatio]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text80" Left="264.6" Top="151.2" Width="103.95" Height="18.9" Text="GrowthRatio"/>
+      <DataBand Name="Weaning" Top="467.45" Width="718.2" Height="23.12" DataSource="rpt_HerdProfile_Weaning">
+        <TextObject Name="Text8" Left="9.45" Width="28.35" Height="18.9" Text="[rpt_HerdProfile_Weaning.Sex_Code]" HorzAlign="Center" VertAlign="Center"/>
+        <TextObject Name="Text10" Left="47.25" Width="56.7" Height="18.9" Text="[rpt_HerdProfile_Weaning.Born]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text12" Left="113.4" Width="66.15" Height="18.9" Text="[rpt_HerdProfile_Weaning.Weaned]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text14" Left="207.9" Width="37.8" Height="18.9" Text="[rpt_HerdProfile_Weaning.CalfAgeDays]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text16" Left="283.5" Width="37.8" Height="18.9" Text="[rpt_HerdProfile_Weaning.DamAgeYears]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text18" Left="349.65" Width="56.7" Height="18.9" Text="[rpt_HerdProfile_Weaning.WWT]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text40" Left="415.8" Top="2.11" Width="56.7" Height="18.9" Text="[rpt_HerdProfile_Weaning.ADGBW]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text42" Left="491.4" Top="4.22" Width="56.7" Height="18.9" Text="[rpt_HerdProfile_Weaning.WWPDA]" HorzAlign="Right" VertAlign="Center"/>
+      </DataBand>
+      <DataBand Name="Data1" Top="510.57" Width="718.2" Height="66.15">
+        <TextObject Name="Text28" Left="113.4" Top="47.25" Width="132.3" Height="18.9" Fill.Color="WhiteSmoke" Text="First Cycle" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+        <TextObject Name="Text29" Left="56.7" Top="47.25" Width="47.25" Height="18.9" Text="Born" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+        <TextObject Name="Text30" Left="264.6" Top="47.25" Width="132.3" Height="18.9" Fill.Color="WhiteSmoke" Text="Second Cycle" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+        <TextObject Name="Text33" Left="415.8" Top="47.25" Width="132.3" Height="18.9" Fill.Color="WhiteSmoke" Text="Third Cycle" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+        <TextObject Name="Text36" Left="557.55" Top="47.25" Width="122.85" Height="18.9" Fill.Color="WhiteSmoke" Text="Later" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+        <TextObject Name="Text20" Top="18.9" Width="680.4" Height="28.35" Text="Estrus Cycles" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      </DataBand>
+      <DataBand Name="Estrus" Top="596.72" Width="718.2" Height="18.9" DataSource="rpt_HerdProfile_Estrus">
+        <TextObject Name="Text23" Width="66.15" Height="18.9" Text="[rpt_HerdProfile_Estrus.DamClass]" VertAlign="Center"/>
+        <TextObject Name="Text25" Left="66.15" Width="37.8" Height="18.9" Text="[rpt_HerdProfile_Estrus.TotalBorn]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text31" Left="264.6" Width="103.95" Height="18.9" Fill.Color="WhiteSmoke" Text="[rpt_HerdProfile_Estrus.DateSpan2]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text34" Left="415.8" Width="103.95" Height="18.9" Fill.Color="WhiteSmoke" Text="[rpt_HerdProfile_Estrus.DateSpan3]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text24" Left="113.4" Width="103.95" Height="18.9" Fill.Color="WhiteSmoke" Text="[rpt_HerdProfile_Estrus.DateSpan1]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text27" Left="217.35" Width="28.35" Height="18.9" Fill.Color="WhiteSmoke" Text="[rpt_HerdProfile_Estrus.Count1]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text32" Left="368.55" Width="28.35" Height="18.9" Fill.Color="WhiteSmoke" Text="[rpt_HerdProfile_Estrus.Count2]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text35" Left="519.75" Width="28.35" Height="18.9" Fill.Color="WhiteSmoke" Text="[rpt_HerdProfile_Estrus.Count3]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text37" Left="557.55" Width="94.5" Height="18.9" Fill.Color="WhiteSmoke" Text="[rpt_HerdProfile_Estrus.DateSpanLater]" HorzAlign="Right" VertAlign="Center"/>
+        <TextObject Name="Text38" Left="642.6" Width="37.8" Height="18.9" Fill.Color="WhiteSmoke" Text="[rpt_HerdProfile_Estrus.CountLater]" HorzAlign="Right" VertAlign="Center"/>
+      </DataBand>
+      <DataFooterBand Name="DataFooter1" Top="635.62" Width="718.2" Height="18.9"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="674.52" Width="718.2" Height="9.45"/>
+  </ReportPage>
+</Report>

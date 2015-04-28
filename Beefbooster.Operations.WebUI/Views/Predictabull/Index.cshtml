@@ -1,0 +1,465 @@
+﻿<style type="text/css">
+    .rowid { font-size: 1.2em; }
+
+    .pass { color: green }
+
+    .fail { color: red }
+
+    .matchall { background: greenyellow }
+
+    .divhead {
+        background: lavender;
+        font-size: large;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .pct { width: 10% }
+
+    .matchPercentile { border: 2px solid #f00; }
+
+    #tblPcts tbody tr:nth-child(2n + 1) { background-color: lightgoldenrodyellow }
+
+    #tblCustomers tbody tr:nth-child(2n + 1) { background-color: lightgrey }
+
+    #tblCustomers tbody tr td label { cursor: pointer }
+
+    #tblBulls tbody tr td { cursor: pointer }
+</style>
+
+<script type="text/javascript">
+
+    // from MatchTypeEnum
+    var MatchTypeString = 1;
+    var MatchTypeRange = 2;
+    var MatchTypePctT10 = 3;
+    var MatchTypePctT25 = 4;
+    var MatchTypePctT40 = 5;
+    var MatchTypePctB40 = 6;
+    var MatchTypePctB25 = 7;
+    var MatchTypePctB10 = 8;
+
+
+    function Customer(userId, accountNumber, userName, email, company, contact, contracted, purchased) {
+        this.id = userId;
+        this.accountNumber = accountNumber;
+        this.userName = userName;
+        this.email = email;
+        this.company = company;
+        this.contact = contact;
+        this.contracted = contracted;
+        this.purchased = purchased;
+    }
+
+    function Bull(seqmatch, totmatch, calfsn, calfid, feedid, pen, saleclass, selidx, bulltraits) {
+        this.CalfId = calfid;
+        this.CalfSN = calfsn;
+        this.FeedId = feedid;
+        this.Pen = pen;
+        this.SaleClass = saleclass;
+        this.SelIdx = selidx;
+        this.BullTraits = bulltraits;
+        //this.SequencedMatches = seqmatch;
+        this.SequencedMatches = ko.observable(seqmatch);
+        this.TraitCount = ko.observable(bulltraits.length);
+        this.TotalMatches = totmatch;
+    }
+
+    function StrainPercentile(colname, colenum, calcon, pcts) {
+        this.Colname = colname;
+        this.ColumnNameEnum = colenum,
+            this.CalculatedOn = calcon;
+        this.Percentiles = pcts;
+    }
+
+    function Trait(id, name, col, seq, isrng, ispct, min, max, exact, comment) {
+        this.Id = id;
+        this.Name = name;
+        this.ColIdx = col;
+        this.Sequence = seq;
+        this.IsRange = isrng,
+            this.IsPercentile = ispct;
+        this.RangeMinValue = min;
+        this.RangeMaxValue = max;
+        this.ExactValue = exact;
+        this.Comment = comment;
+    }
+
+    function MatchingTrait(id, val) {
+        this.Id = id;
+        this.BullValue = val;
+    }
+
+
+    $(document).ready(function() {
+
+        function myVM() {
+            var self = this;
+            this.strains = ko.observableArray(["M1", "M2", "M3", "M4", "TX"]);
+            this.years = ko.observableArray([2012, 2013, 2014, 2015]);
+            this.selectedYear = ko.observable(new Date().getFullYear());
+            this.Customers = ko.observableArray();
+            this.Bulls = ko.observableArray();
+            this.Traits = ko.observableArray();
+            this.StrainPercentiles = ko.observableArray();
+/*
+            self.TestFunction=function ()
+            {
+                var s = $("#ddlStrains option:selected").val();
+            };
+*/
+
+            self.AccountsWithPreferences = function() {
+                $.blockUI({ message: $("#getting-customers-dialog") });
+                self.Customers.removeAll();
+                self.Bulls.removeAll();
+                self.Traits.removeAll();
+                self.StrainPercentiles.removeAll();
+
+
+/*
+                var s = $("#ddlStrains option:selected").val();
+                var t = $("#ddlYears option:selected").val();
+*/
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Customers", "Predictabull")',
+                    dataType: "json",
+                    data: { saleYear: $("#ddlYears option:selected").val(), strain: $("#ddlStrains option:selected").val() },
+                    traditional: true,
+                    failure: function(data) {
+                        alert(data);
+                        $.unblockUI();
+                    },
+                    success: function(data) {
+                        self.Customers.removeAll();
+                        self.Bulls.removeAll();
+                        self.Traits.removeAll();
+                        self.StrainPercentiles.removeAll();
+                        var results = JSON.parse(data);
+                        $(results.Accounts).each(function(index, value) {
+                            self.Customers.push(new Customer(value.UserId, value.AccountNumber, value.Username, value.Email, value.Company, value.Contact, value.Contracted, value.Purchased));
+                        });
+                        $.unblockUI();
+                    }
+                });
+            };
+
+            self.FindBulls = function(selectecdCustomer) {
+
+                $.blockUI({ message: $("#selecting-bulls-dialog") });
+
+                self.Bulls.removeAll();
+                self.Traits.removeAll();
+                self.StrainPercentiles.removeAll();
+
+                $("#tblCustomers tbody tr").css("background", "white");
+                var custRow = $("#tblCustomers tbody tr td:first-child").filter(function() {
+                    return $(this).text() == selectecdCustomer.id;
+                }).closest("tr");
+                custRow.css("background", "yellow");
+
+                var yr = $("#ddlYears option:selected").val();
+                var strn = $("#ddlStrains option:selected").val();
+                var scope = $("input:radio[name=scope]:checked").val();
+                var basketSize = $("#ddlBasketSize option:selected").val();
+                var saleStatus = $("input:radio[name=saleStatus]:checked").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Bulls", "Predictabull")',
+                    dataType: "json",
+                    data: { saleYear: yr, strain: strn, userId: selectecdCustomer.id, basketSize: basketSize, scope: scope, saleStatus: saleStatus },
+                    traditional: true,
+                    failure: function(data) {
+                        alert(data);
+                        $.unblockUI();
+                    },
+                    success: function(data) {
+                        self.Bulls.removeAll();
+                        self.Traits.removeAll();
+                        self.StrainPercentiles.removeAll();
+                        var bullSelectionVM = JSON.parse(data);
+
+                        $(bullSelectionVM.DesiredTraits).each(function(index, value) {
+                            self.Traits.push(new Trait(value.Id, value.TraitName, value.BullSaleView, value.Sequence, value.HasRange, value.Percentile, value.RangeMinValue, value.RangeMaxValue, value.ExactValue, value.Comment));
+                        });
+
+                        $(bullSelectionVM.QualifyingBulls).each(function(index, value) {
+                            self.Bulls.push(new Bull(value.SequencedMatches, value.TotalMatches, value.Bull.Calf_SN, value.Bull.Calf_Id, value.Bull.Feedlot_Id, value.Bull.Pen, value.Bull.TagColour, value.Bull.SEL_IDX, value.BullTraits));
+                        });
+
+                        $(bullSelectionVM.RequiredPercentiles).each(function(index, value) {
+                            self.StrainPercentiles.push(new StrainPercentile(value.ColumnName, value.ColumnNameEnum, value.CalculatedOn, value.Percentiles));
+                        });
+
+                        $.unblockUI();
+                    }
+
+                });
+            };
+
+            self.HighlightMatchingTraits = function(selectedBull) {
+                resetMatching();
+                highlightTraitRow(selectedBull);
+            };
+
+        };
+
+        ko.applyBindings(new myVM());
+
+        function resetMatching() {
+            $("#tblBulls tbody tr").css("background", "white");
+            $("#tblTraits tbody tr").css("background", "white");
+            $("#tblPcts tbody tr").css("background", "white");
+            $("#tblPcts tbody tr td").css("border", "0 solid white");
+        }
+
+        function highlightTraitRow(selectedBull) {
+
+            var bullRow = $("#tblBulls tbody tr td:first-child").filter(function() {
+                return $(this).text() == selectedBull.CalfSN;
+            }).closest("tr");
+            bullRow.css("background", "yellow");
+
+            $("#tblTraits thead th:eq(5)").text(selectedBull.CalfId);
+
+            var length = selectedBull.BullTraits.length;
+            for (var i = 0; i < length; i++) {
+                var bullTrait = selectedBull.BullTraits[i];
+
+                // row with this trait
+                var tableRow = $("#tblTraits tbody tr td:first-child").filter(function() {
+                    return $(this).text() == bullTrait.Trait.Id;
+                }).closest("tr");
+
+                var valCol = tableRow.find("td:eq(7)");
+
+                if (bullTrait.Qualifies) {
+                    valCol.css("background", "greenyellow");//.css("color", "yellow");
+                } else {
+                    valCol.css("background", "white");//.css("color", "white");
+                 }
+
+                valCol.text(selectedBull.BullTraits[i].BullValue);
+
+                // highilight qualifying rows              
+                if (bullTrait.Trait.Percentile) {
+                    showMatchingPercentile(bullTrait.Qualifies, bullTrait.Trait.BullSaleView, bullTrait.MatchType);
+                }
+            }
+        }
+
+        function styleMatchingPercentile(tbRw, columnIndex) {
+            $(tbRw).find("td:eq(" + columnIndex + ")").css("border", "2px solid #f00");
+        }
+
+        function showMatchingPercentile(qualifies, col, percentile) {
+            var tableRow = $("#tblPcts tbody tr td:first-child").filter(function() {
+                return $(this).text() == col;
+            }).closest("tr");
+            if (qualifies) {
+                tableRow.css("background", "greenyellow");
+            }
+            switch (percentile) {
+            case MatchTypePctT10:
+                styleMatchingPercentile(tableRow, 8);
+                break;
+            case MatchTypePctT25:
+                styleMatchingPercentile(tableRow, 7);
+                break;
+            case MatchTypePctT40:
+                styleMatchingPercentile(tableRow, 6);              
+                break;
+            case MatchTypePctB40:
+                styleMatchingPercentile(tableRow, 5);                
+                break;
+            case MatchTypePctB25:
+                styleMatchingPercentile(tableRow, 4);
+                break;
+            case MatchTypePctB10:
+                styleMatchingPercentile(tableRow, 3);                
+                break;
+            default:
+            }
+        }
+
+    });
+
+</script>
+
+<div style="padding-bottom: 20px">
+    <div style="float: left; font-size: large; font-weight: bold">Predictabull Selections</div>
+    <div id="divYears" style="float: left; padding-left: 20px">
+        Sale Year:<select id="ddlYears" data-bind="options: years, value: selectedYear"></select>
+    </div>
+
+    <div id="divStrains" style="float: left; padding-left: 20px">
+        Strain:<select id="ddlStrains" data-bind="options: strains"></select>
+    </div>
+    <div style="float: left; padding-left: 20px; padding-right: 60px" >
+        <button class="ui-button-text-only" data-bind="click: function () { AccountsWithPreferences(); }" id="btnCustomers">Get Customers</button>   
+    </div>
+    @Html.ActionLink("Settings",
+        "Index", // <-- ActionMethod
+        "Settings", // <-- Controller Name.
+        null, // new { article.ArticleID }, // <-- Route arguments.
+        null // <-- htmlArguments .. which are none. You need this value
+        //     otherwise you call the WRONG method ...
+        //     (refer to comments, below).
+        )
+</div>
+<div id="divCustomers" style="border-color: black; border-style: solid; border-width: 1px; clear: both; width: 75%">
+    <div class="divhead">Customers</div>
+    <div id="divBasketSize" style="float: left;">
+        Basket Size:<select id="ddlBasketSize">
+                        <option value="3">3</option>
+                        <option value="5" selected="selected">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="25">25</option>      
+                    </select>
+    </div>
+
+    <div id="divScope" style="float: left; padding-left: 40px">
+        Scope:<input id="searchScopeAll" type="radio" name="scope" value="all" checked="checked">All  <input id="searchScopeAvail" type="radio" name="scope" value="available">Available
+    </div>
+    
+    <div id="divSaleStatus" style="float: left; padding-left: 40px">
+        Sale Status:<input id="saleStatusAll" type="radio" name="saleStatus" value="all" checked="checked">All  <input id="saleStatusTagged" type="radio" name="saleStatus" value="classed">Classed
+    </div>
+
+    <div id="divCustTable" style="clear: both">   
+        <table id="tblCustomers"style="border-color: black; border-style: solid; border-width: 1px; clear: both; padding-top: 10px;">
+            <thead>
+                <tr class="ui-widget-header">     
+                    <th>User</th>
+                    <th>Contact</th>
+                    <th>Company</th>
+                    <th># Contracted</th>
+                    <th># Purchased</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: Customers">
+                <tr style="cursor: pointer;" data-bind="click: $root.FindBulls">                
+                    <td hidden="hidden"  data-bind="text: id" />
+                    <td data-bind="text: userName" />
+                    <td data-bind="text: contact" />
+                    <td data-bind="text: company" />
+                    <td data-bind="text: contracted" />
+                    <td data-bind="text: purchased" />
+                    <td style="font-size: smaller" data-bind="text: email" />
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="Results" style="clear: both; padding-top: 10px;">
+    <div id="divBulls" style="border-color: coral; border-style: solid; border-width: 2px; float: left;">
+        <div class="divhead">Bulls Matching Preferences</div>
+        <table id="tblBulls">
+            <thead>
+                <tr class="ui-widget-header">     
+                    <th>Calf SN</th>
+                    <th>Matches</th>
+                    <th>Calf Id</th>
+                    <th>Tag</th>
+                    <th>Pen</th>
+                    <th>Class</th>
+                    <th>Sel Idx</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: Bulls">
+                <tr data-bind="click: $root.HighlightMatchingTraits">
+                    <td data-bind="text: CalfSN"></td>
+                    <td data-bind="text: SequencedMatches, css: { matchall: SequencedMatches() == TraitCount() }"></td>
+                    <td data-bind="text: CalfId"></td>
+                    <td data-bind="text: FeedId"></td>
+                    <td data-bind="text: Pen"></td>
+                    <td data-bind="text: SaleClass"></td>
+                    <td data-bind="text: SelIdx"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    
+
+    <div id="divDesiredTraits" style="border-color: coral; border-style: solid; border-width: 2px; float: left; margin-left: 10px; overflow: auto;">
+        <div class="divhead">Desired Traits</div>
+        <table id="tblTraits">
+            <thead>
+                <tr class="ui-widget-header" >
+                    <th>Seq</th>
+                    <th>Trait Name</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                    <th>Exact</th>
+                    <th>Calf Id</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: Traits">
+                <tr>
+                    <td hidden="hidden" data-bind="text: Id"></td>
+                    <td data-bind="text: Sequence"></td>
+                    <td hidden="hidden" data-bind="text: ColIdx"></td>
+                    <td data-bind="text: Name"></td>
+                    <td data-bind="if: IsRange"><label data-bind="text: RangeMinValue"></label></td>
+                    <td  data-bind="if: IsRange"><label data-bind="text: RangeMaxValue"></label></td>
+                    <td>
+                        <label data-bind="text: ExactValue"></label>
+                        <div data-bind="if: IsPercentile"></div>
+                    </td>
+                    <td></td>
+                    <td style="font-size: smaller" data-bind="text: Comment"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="divPercentiles" style="border-color: black; border-style: solid; border-width: 1px; clear: both; width: 65%;">   
+    <div class="divhead">Percentiles</div>
+    <table id="tblPcts">
+        <thead>
+            <tr class="ui-widget-header" >
+                <th>Name</th>
+                <th>Calculated On</th>
+                <th class="pct">10</th>
+                <th class="pct">25</th>
+                <th class="pct">40</th>
+                <th class="pct">60</th>
+                <th class="pct">75</th>
+                <th class="pct">90</th>
+            </tr>
+        </thead>        
+        <tbody data-bind="foreach: StrainPercentiles">
+            <tr>
+                <td hidden="hidden" data-bind="text: ColumnNameEnum"></td>
+                <td data-bind="text: Colname"></td>                     
+                <td data-bind="text: CalculatedOn"></td>   
+                <td class="pct" data-bind="text: Percentiles[1].PercentileValue"></td>                     
+                <td class="pct" data-bind="text: Percentiles[2].PercentileValue"></td>                     
+                <td class="pct" data-bind="text: Percentiles[3].PercentileValue"></td>                     
+                <td class="pct" data-bind="text: Percentiles[4].PercentileValue"></td>                     
+                <td class="pct" data-bind="text: Percentiles[5].PercentileValue"></td>                     
+                <td class="pct" data-bind="text: Percentiles[6].PercentileValue"></td>                     
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="getting-customers-dialog" style="display: none;">
+    <img src="~/Content/Beefbooster/Images/wait_animated.gif" alt="" />
+    <span>Retrieving customers. One moment...</span>
+</div>
+
+<div id="selecting-bulls-dialog"  style="display: none;">
+    <img src="~/Content/Beefbooster/Images/wait_animated.gif" alt=""/>
+    <span>Evaluating and selecting bulls. One moment...</span>
+</div>

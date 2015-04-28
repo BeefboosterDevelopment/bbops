@@ -1,0 +1,46 @@
+﻿@using Newtonsoft.Json
+@model Beefbooster.Operations.WebUI.Models.HerdProfile.HerdProfileVM
+
+@{
+    ViewBag.Title = "Herd Profile ";
+    IHtmlString jsonData = @Html.Raw(JsonConvert.SerializeObject(Model));
+}
+
+
+
+<script type="text/javascript">
+    var _rootUrl;
+    var _viewModel;
+
+    $(function() {
+        _rootUrl = ""; // TODO: set this
+        _viewModel = ko.mapping.fromJS(@Html.Raw(jsonData));
+        ko.applyBindings(_viewModel);
+    });
+
+</script>
+
+
+<h2>Herd Profile Report</h2>
+@using (Html.BeginForm("Index", "HerdProfile", FormMethod.Post, null))
+{
+    @Html.HiddenFor(model => model.SelectedYear, new {data_bind = "value: SelectedYear"})
+    @Html.HiddenFor(model => model.SelectedHerdSN, new {data_bind = "value: SelectedHerdSN"})
+
+    <div style="border-color: blue; border-style: solid; border-width: 1px">
+        <div style="float: left">
+            <div id="divYears" style="float: left; padding-left: 20px">
+                Year:<select id="ddlYears" data-bind="options: Years, value: SelectedYear"></select>
+            </div>
+
+            <div id="divHerds" style="float: left; padding-left: 20px">
+                Herd:<select id="ddlHerds" data-bind="options: Herds, value:SelectedHerdSN, optionsText: function(h) {return h.Code() + ' (' + h.Strain() + ')'}, optionsValue: function(h) {return h.SN()}, optionsCaption:'Choose herd...'"></select>
+            </div>
+            <div style="float: left; padding-left: 30px;">
+                <input name="btnGenerate" type="submit" value="Generate" class="btn btn-success" />
+            </div>
+        </div>
+        <div id="rpt" style="border-color: green; border-style: solid; border-width: 1px; clear: both;">
+        </div>
+    </div>
+}

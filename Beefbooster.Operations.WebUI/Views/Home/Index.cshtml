@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Beefbooster Operations</h1>
+    <p class="lead">Back office management activities for Beefbooster Inc.</p>
+    <p><a href="http://www.beefbooster.com" class="btn btn-primary btn-lg">www.beefbooster.com &raquo;</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Bull Selection Advisor</h2>
+        <p>
+            Predict-a-Bull back office application.  After customers enter their preferred bull traits for a season
+            this application guides you to the bulls that most fit their preferences and are still available.
+        </p>
+        <p>
+            @Html.ActionLink("Go >>", "Index", "Predictabull", null, new { @class = "btn btn-default" })
+@*            <a class="btn btn-default" href="">Go &raquo;</a> *@
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>Herd Profile</h2>
+        <p>Select a breeder herd and calving year.  Your report will be generated and rendered.  You may print it or export it as a PDF.</p>
+        <p>
+            @Html.ActionLink("Go >>", "Index", "HerdProfile", null, new { @class = "btn btn-default" })
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>Sale Draw ShufflerService</h2>
+        <p>Select a sale day. This service will discover all the people buying bulls on that day and how many bulls they have ordered. 
+        It will randomize the selection order.</p>
+        <p>
+            @Html.ActionLink("Go >>", "Index", "Shuffler", null, new { @class = "btn btn-default" })
+        </p>
+    </div>
+</div>

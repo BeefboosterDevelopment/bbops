@@ -1,0 +1,27 @@
+# output
+bin
+obj
+publish
+logfiles
+out
+
+# unit test results
+[Tt]est[Rr]esult*
+*.Cache
+
+# User Specific Files
+*.user
+*.suo
+
+# ReSharper 
+_ReSharper*
+
+# nuget
+packages
+
+# Click-Once directory
+publish
+
+# Publish Web Output
+*.Publish.xml
+

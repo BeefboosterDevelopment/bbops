@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Predict-a-Bull Settings";
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        function myVM() {
+            var self = this;
+            this.years = ko.observableArray([2013, 2014, 2015]);
+            self.CalculatePercentiles = function() {
+                $.blockUI({ message: $("#calculating-percentiles-dialog") });
+
+                $.ajax({
+                    //type: "PUT",
+                    type: "PUT",
+                    url: '@Url.Action("RecalculatePercentiles", "Settings")',
+                    dataType: "json",
+                    data: { saleYear: $("#ddlYears option:selected").val() },
+                    failure: function(data) {
+                        $.unblockUI();
+                        alert(data);
+                    },
+                    success: function() {
+                        $.unblockUI();
+                        alert("Done calculating.");
+                    }
+                });
+            };
+        };
+
+        ko.applyBindings(new myVM());
+    });
+
+</script>
+<div>
+    <div id="divYears" style="float: left; padding-left: 20px">
+        Sale Year:<select id="ddlYears" data-bind="options: years"></select>
+    </div>
+    <div style="float: left; padding-left: 20px">
+        <button  class="ui-button-text-only"  data-bind="click: function () { CalculatePercentiles(); }" id="btnCalcPercentiles">Re-Calculate Percentiles</button>   
+    </div>
+</div>
+
+<div id="calculating-percentiles-dialog" style="display: none; font-family: Arial, Helvetica, sans-serif;">
+    <img src="~/Content/Beefbooster/Images/wait_animated.gif" alt=""/>
+    <span>Calculating percentiles for all traits within each strain. One moment...</span>
+</div>

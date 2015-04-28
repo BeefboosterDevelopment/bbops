@@ -1,0 +1,72 @@
+﻿@using Newtonsoft.Json
+@model Beefbooster.Operations.WebUI.Models.Shuffler.InputVM
+@{
+    ViewBag.Title = "Sale Day Bingo Draw";
+    IHtmlString jsonData = @Html.Raw(JsonConvert.SerializeObject(Model));
+}
+
+<script type="text/javascript">
+    var _viewModel;
+
+    function DrawOrder(selNum, custName) {
+        this.CustomerName = custName;
+        this.SelectionOrder = selNum;
+    }
+
+    $(document).ready(function() {
+        _viewModel = ko.mapping.fromJS(@Html.Raw(jsonData));
+        _viewModel.Draw = ko.observableArray();
+        ko.applyBindings(_viewModel);
+
+    });
+
+    function shuffle() {
+        _viewModel.Draw.removeAll();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Shuffle", "Shuffler")',
+            dataType: "json",
+            data: { selectedSaleDaySN: $("#ddlSaleDays option:selected").val() },
+            success: function(results) {
+                $(results.SelectionOrder).each(function(index, value) {
+                    _viewModel.Draw.push(new DrawOrder(value.SelectionNumber, value.CustomerName));
+                });
+            },
+            failure: function(results) {
+                alert(results);
+            }
+        });
+    };
+
+</script>
+
+<h2>Shuffle Customer Names For Sale Day Selections</h2>
+<div style="border-color: blue; border-style: solid; border-width: 1px">
+    <div style="float: left">
+        <div id="divSaleDays" style="float: left; padding-left: 20px">
+            Sale:<select id="ddlSaleDays" data-bind="options: SaleDays, optionsText: function(h) {return  h.StrainCode() + ' (' + h.SaleDay()  + ')'}, optionsValue: function(h) {return h.SpringSaleDateSN()}, optionsCaption:'Choose sale day...'"></select>
+        </div>
+        <div style="float: left; padding-left: 30px;">
+            <div style="float: left; padding-left: 20px; padding-right: 60px">
+                <button id="btnShuffle" class="btn btn-success" data-bind="click: function () { shuffle(); }">Shuffle</button>
+            </div>
+        </div>
+    </div>
+    
+    <div style="clear: both; margin-top: 15px">
+        <table id="tblDraw" style="border-color: black; border-style: solid; border-width: 1px; clear: both; padding: 10px;">
+            <thead>
+                <tr>
+                    <th>Selection #</th>
+                    <th>Customer</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: Draw">
+                <tr>
+                    <td data-bind="text: SelectionOrder" />
+                    <td data-bind="text: CustomerName" />
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
