@@ -20,6 +20,5 @@ namespace Beefbooster.Bull.Entities.Models
         public int? InvNum { get; set; }
 
         public virtual PO PO { get; set; }
-        //public virtual SpringSaleDate SpringSaleDate { get; set; }
     }
 }

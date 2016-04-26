@@ -10,7 +10,7 @@ namespace Beefbooster.Operations.Service
         //private readonly IRepositoryAsync<SpringSaleDate> _springSaleDateRepository;
         private readonly IRepositoryAsync<SpringSale> _springSaleRepository;
 
-        public SpringSaleService(IRepositoryAsync<SpringSale> springSaleRepository//,
+        public SpringSaleService(IRepositoryAsync<SpringSale> springSaleRepository //,
             /*IRepositoryAsync<SpringSaleDate> springSaleDateRepository*/)
         {
             //_springSaleDateRepository = springSaleDateRepository;

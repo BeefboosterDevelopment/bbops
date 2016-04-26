@@ -16,7 +16,7 @@ namespace Beefbooster.Data.Mapping
                 .IsFixedLength()
                 .HasMaxLength(2);
 
-            ToTable("SpringSaleDate");
+            ToTable("SpringSaleDate", "bt");
             Property(t => t.SpringSaleDateSN).HasColumnName("SpringSaleDateSN");
             Property(t => t.SpringSaleSN).HasColumnName("SpringSaleSN");
             Property(t => t.SaleDate).HasColumnName("SaleDate");

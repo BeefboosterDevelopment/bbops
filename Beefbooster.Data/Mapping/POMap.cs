@@ -7,6 +7,8 @@ namespace Beefbooster.Data.Mapping
     {
         public POMap()
         {
+            ToTable("PO", "bt");
+
             // Primary Key
             HasKey(t => t.POSN);
 
@@ -19,7 +21,6 @@ namespace Beefbooster.Data.Mapping
                 .HasMaxLength(20);
 
             // Table & Column Mappings
-            ToTable("PO");
             Property(t => t.POSN).HasColumnName("POSN");
             Property(t => t.AccountNo).HasColumnName("AccountNo");
             Property(t => t.ReceiveDate).HasColumnName("ReceiveDate");

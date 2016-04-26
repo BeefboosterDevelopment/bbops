@@ -16,7 +16,7 @@ namespace Beefbooster.Data.Mapping
                 .HasMaxLength(50);
 
             // Table & Column Mappings
-            ToTable("SpringSale");
+            ToTable("SpringSale", "bt");
             Property(t => t.SpringSaleSN).HasColumnName("SpringSaleSN");
             Property(t => t.CalfBirthYr_Num).HasColumnName("CalfBirthYr_Num");
             Property(t => t.Name).HasColumnName("Name");

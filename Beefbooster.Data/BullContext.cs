@@ -21,15 +21,15 @@ namespace Beefbooster.Data
 
         public DbSet<SpringSaleDate> SpringSaleDates { get; set; }
         public DbSet<SpringSale> SpringSales { get; set; }
-        //public DbSet<PO> POs { get; set; }
-        //public DbSet<VWPOD> PODetails { get; set; }
+        public DbSet<PO> POs { get; set; }
+        public DbSet<VWPOD> PODetails { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new SpringSaleDateMap());
             modelBuilder.Configurations.Add(new SpringSaleMap());
-            //modelBuilder.Configurations.Add(new POMap());
-            //modelBuilder.Configurations.Add(new vwPODMap());
+            modelBuilder.Configurations.Add(new POMap());
+            modelBuilder.Configurations.Add(new VWPODMap());
 
             // Configure Code First to ignore PluralizingTableName convention 
             // If you keep this convention then the generated tables will have pluralized names. 

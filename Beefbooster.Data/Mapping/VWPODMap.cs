@@ -8,10 +8,11 @@ namespace Beefbooster.Data.Mapping
     {
         public VWPODMap()
         {
+            ToTable("vwPOD", "bt");
+
             // Primary Key
             HasKey(t => new {t.POSN, t.SpringSaleDateSN});
-            
-            //ToTable("VWPOD");
+
             Property(t => t.POSN).HasColumnName("POSN").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
             Property(t => t.SpringSaleDateSN)
                 .HasColumnName("SpringSaleDateSN")
@@ -23,7 +24,7 @@ namespace Beefbooster.Data.Mapping
 
             // columns from the view
             Property(t => t.AccountNo);
-            Property(t => t.Contact);            
+            Property(t => t.Contact);
 
 
             // Relationships

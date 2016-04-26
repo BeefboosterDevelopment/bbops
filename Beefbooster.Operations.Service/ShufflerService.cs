@@ -18,6 +18,19 @@ namespace Beefbooster.Operations.Service
 
         public string[] BingoDraw(int saleDateSN)
         {
+/*            try
+            {
+                List<VWPOD> test = _poRepository
+                    .Query(d => d.SpringSaleDateSN == saleDateSN)
+                    .Select()
+                    .ToList();
+            }
+            catch (Exception e)
+            {
+                string s = e.Message;
+            }
+ */
+
             // all purchase order details
             IEnumerable<VWPOD> pods = _poRepository
                 .Query(d => d.SpringSaleDateSN == saleDateSN)

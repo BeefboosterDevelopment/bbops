@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using Repository.Pattern.Annotations;
 using Repository.Pattern.Ef6;
 
 namespace Beefbooster.Bull.Entities.Models
@@ -10,6 +12,8 @@ namespace Beefbooster.Bull.Entities.Models
             SpringSaleDates = new List<SpringSaleDate>();
             POs = new List<PO>();
         }
+
+        
 
         public int SpringSaleSN { get; set; }
         public int CalfBirthYr_Num { get; set; }
